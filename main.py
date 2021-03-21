@@ -63,30 +63,33 @@ def get_Exp_date():
     return exDate
     pass
 
-print("welcome to the pharmacy application")
-print("please choose the operation type (by letter")
-print("A. Add a new medicine")
-print("B. show the inventory")
-print("C. Update the inventory")
-print("D. search and delete")
-print("E. billing")
-choice = input()
-if choice =="A" or choice == "a":
-    print('Enter the following new medicne data:')
-    Type = get_type()
-    Med_Name = get_name()
-    Med_ID = ID(Med_Name)
-    Price = get_Price_in_QAR()
-    Quantity = get_quantity()
-    Quantity_sold = get_Quantity_sold()
-    Exp_date = get_Exp_date()
-    available_stock = Quantity - Quantity_sold
-    list = [Type, Med_ID, Med_Name, Price, Quantity, Quantity_sold, Exp_date, available_stock]
-    with open("pharmacy.txt", 'a') as csvFile:
-        write_file = csv.writer(csvFile)
-        write_file.writerow(list)
-        csvFile.close()
-
+while True:
+    print("welcome to the pharmacy application")
+    print("please choose the operation type (by letter")
+    print("A. Add a new medicine")
+    print("B. show the inventory")
+    print("C. Update the inventory")
+    print("D. search and delete")
+    print("E. billing")
+    print("F. exit application")
+    choice = input()
+    if choice == "A" or choice == "a":
+        print('Enter the following new medicne data:')
+        Type = get_type()
+        Med_Name = get_name()
+        Med_ID = ID(Med_Name)
+        Price = get_Price_in_QAR()
+        Quantity = get_quantity()
+        Quantity_sold = get_Quantity_sold()
+        Exp_date = get_Exp_date()
+        available_stock = Quantity - Quantity_sold
+        list = [Type, Med_ID, Med_Name, Price, Quantity, Quantity_sold, Exp_date, available_stock]
+        with open("pharmacy.txt", 'a') as csvFile:
+            write_file = csv.writer(csvFile)
+            write_file.writerow(list)
+            csvFile.close()
+    if choice == "f" or choice == "F":
+        break
 
 def showExpiryDate():
     exDateList = []
