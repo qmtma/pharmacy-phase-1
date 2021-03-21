@@ -63,6 +63,41 @@ def get_Exp_date():
     return exDate
     pass
 
+
+def showExpiryDate():
+    exDateList = []
+    currentDate = datetime.datetime.today().date()
+    with open("pharmacy.txt", 'r') as csvFile:
+        readFile = csv.reader(csvFile)
+        for row in readFile:
+            Date = datetime.datetime.strptime(row[6], "%Y-%m-%d").date()
+            if (currentDate.year == Date.year) and (currentDate.month - Date.month) < 3:
+                exDateList.append(row)
+        if not exDateList:
+            print("No medicines expire within 3 months")
+        else:
+            print(tabulate(exDateList,
+                           headers=["Type", "ID", "Name", "Price", "Quantity", "Quantity Sold", "Expiry Date",
+                                    "Available Stock"], tablefmt='psql'))
+    pass
+
+
+def showStock10():
+    stockItemList = []
+    with open("pharmacy.txt", 'r') as csvFile:
+        readFile = csv.reader(csvFile)
+        for row in readFile:
+            if int(row[7]) < 10:
+                stockItemList.append(row)
+    if not stockItemList:
+        print("Items with stock less than 10: None")
+    else:
+        print(tabulate(stockItemList,
+                       headers=["Type", "ID", "Name", "Price", "Quantity", "Quantity Sold", "Expiry Date",
+                                "Available Stock"], tablefmt='psql'))
+    pass
+
+
 while True:
     print("welcome to the pharmacy application")
     print("please choose the operation type (by letter")
@@ -88,46 +123,19 @@ while True:
             write_file = csv.writer(csvFile)
             write_file.writerow(list)
             csvFile.close()
+    if choice == "b" or choice == "B":
+        with open("pharmacy.txt", 'r') as csvFile:
+            readFile = csv.reader(csvFile)
+            print(tabulate(readFile, headers=["Type", "ID", "Name", "Price", "Quantity", "Quantity Sold", "Expiry Date",
+                                              "Available Stock"], tablefmt='psql'))
+        csvFile.close()
+        print("if you want to view items with expiry date of three months press e/E")
+        print("if you want to view items with available stock less than 10 press l/L")
+        choice2 = input()
+        if choice2 == "e" or choice2 == "E":
+            showExpiryDate()
+        if choice2 == "l" or choice2 == "L":
+            showStock10()
     if choice == "f" or choice == "F":
         break
 
-def showExpiryDate():
-    exDateList = []
-    currentDate = datetime.datetime.today().date()
-    with open("pharmacy.txt",'r') as csvFile:
-        readFile = csv.reader(csvFile)
-        for row in readFile:
-            Date = datetime.datetime.strptime(row[6], "%Y-%m-%d").date()
-            if (currentDate.year == Date.year) and (currentDate.month - Date.month)<3:
-                exDateList.append(row)
-        if not exDateList:
-            print("No medicines expire within 3 months")
-        else:
-            print(tabulate(exDateList, headers=["Type","ID", "Name", "Price", "Quantity", "Quantity Sold", "Expiry Date", "Available Stock"], tablefmt='psql'))
-    pass
-
-def showStock10():
-    stockItemList = []
-    with open("pharmacy.txt",'r') as csvFile:
-        readFile = csv.reader(csvFile)
-        for row in readFile:
-            if int(row[7])<10:
-                stockItemList.append(row)
-    if not stockItemList:
-        print("Items with stock less than 10: None")
-    else: print(tabulate(stockItemList, headers=["Type","ID", "Name", "Price", "Quantity", "Quantity Sold", "Expiry Date", "Available Stock"], tablefmt='psql'))
-    pass
-
-
-if choice == "b" or choice == "B":
-    with open("pharmacy.txt", 'r') as csvFile:
-        readFile = csv.reader(csvFile)
-        print(tabulate(readFile, headers=["Type","ID", "Name", "Price", "Quantity", "Quantity Sold", "Expiry Date", "Available Stock"], tablefmt='psql'))
-    csvFile.close()
-    print("if you want to view items with expiry date of three months press e/E")
-    print("if you want to view items with available stock less than 10 press l/L")
-    choice2 = input()
-    if choice2 == "e" or choice2 == "E":
-        showExpiryDate()
-    if choice2 == "l" or choice2 == "L":
-        showStock10()
